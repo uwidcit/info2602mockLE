@@ -1,0 +1,5 @@
+tasks:
+  - init: pip3 install -r requirement.txt
+  - init: poetry install
+image:
+  file: .gitpod.Dockerfile

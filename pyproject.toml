@@ -1,0 +1,11 @@
+[tool]
+[tool.poetry]
+authors = ["Your Name <you@example.com>"]
+name = "root"
+description = "mock lab exam"
+version = "0.0.0"
+[tool.poetry.dependencies]
+flask = "==1.0.2"
+python = "^3.7"
+Flask-SQLAlchemy = "^2.4"
+Flask-JWT = "^0.3.2"
