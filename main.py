@@ -1,10 +1,12 @@
 import json
+from flask_cors import CORS
 from flask import Flask, request, render_template
 from sqlalchemy.exc import IntegrityError
 
 ''' Begin boilerplate code '''
 def create_app():
   app = Flask(__name__, static_url_path='')
+  CORS(app)
   app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
   app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
   app.config['SECRET_KEY'] = "MYSECRET"
