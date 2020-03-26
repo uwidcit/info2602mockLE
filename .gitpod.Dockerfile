@@ -1,8 +1,7 @@
 FROM gitpod/workspace-full
                     
 USER gitpod
-RUN npm i -g newman mocha
-
+RUN npm i -g npm newman mocha
 
 USER root
 RUN sudo apt-get update
