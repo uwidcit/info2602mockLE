@@ -1,0 +1,14 @@
+{
+	"id": "80cd143f-8bb4-4313-8f28-a1eaa6ca3cee",
+	"values": [
+		{
+			"key": "mhost",
+			"value": "https://8080-d0baf1e2-269c-4346-99bc-312af5210d06.ws-us02.gitpod.io/",
+			"enabled": true
+		}
+	],
+	"name": "INFO 2602 Globals",
+	"_postman_variable_scope": "globals",
+	"_postman_exported_at": "2020-03-25T01:40:13.952Z",
+	"_postman_exported_using": "Postman/7.21.1"
+}

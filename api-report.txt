@@ -1,0 +1,44 @@
+
+> mock@1.0.0 newman /workspace/info2602mockLE
+> newman run mock_collection.json -g globals.json; return 0;
+
+newman
+
+Mock Exam Collection
+
+→ Take Roll
+  POST https://8080-d0baf1e2-269c-4346-99bc-312af5210d06.ws-us02.gitpod.io//logs [405 METHOD NOT ALLOWED, 548B, 473ms]
+
+→ Get Logs
+  GET https://8080-d0baf1e2-269c-4346-99bc-312af5210d06.ws-us02.gitpod.io//logs [404 NOT FOUND, 597B, 27ms]
+
+→ Update Log
+  PUT https://8080-d0baf1e2-269c-4346-99bc-312af5210d06.ws-us02.gitpod.io//logs/1 [405 METHOD NOT ALLOWED, 548B, 33ms]
+  1. Returns 'Log Updated!' 
+
+┌─────────────────────────┬────────────────────┬────────────────────┐
+│                         │           executed │             failed │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│              iterations │                  1 │                  0 │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│                requests │                  3 │                  0 │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│            test-scripts │                  1 │                  0 │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│      prerequest-scripts │                  0 │                  0 │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│              assertions │                  1 │                  1 │
+├─────────────────────────┴────────────────────┴────────────────────┤
+│ total run duration: 643ms                                         │
+├───────────────────────────────────────────────────────────────────┤
+│ total data received: 588B (approx)                                │
+├───────────────────────────────────────────────────────────────────┤
+│ average response time: 177ms [min: 27ms, max: 473ms, s.d.: 208ms] │
+└───────────────────────────────────────────────────────────────────┘
+
+  #  failure         detail                                                                                                                                                                                                                                          
+                                                                                                                                                                                                                                                                     
+ 1.  AssertionError  Returns 'Log Updated!'                                                                                                                                                                                                                          
+                     expected response body to equal 'Log Updated!' but got '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n<title>405 Method Not Allowed</title>\n<h1>Method Not Allowed</h1>\n<p>The method is not allowed for the requested URL.</p>\n' 
+                     at assertion:0 in test-script                                                                                                                                                                                                                   
+                     inside "Update Log"                                                                                                                                                                                                                             
