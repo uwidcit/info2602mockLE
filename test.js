@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 const { expect, assert }  = require('chai');
 
 
-let URL ="http://127.0.0.1:8080/app";
+let URL ="https://8080-c93f9a26-3d1a-43e5-a2f9-c7714e1dce51.ws-us02.gitpod.io/app";
 const HEADLESS = true;
 const TIMEOUT = 12000;
 

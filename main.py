@@ -3,7 +3,7 @@ from flask_cors import CORS
 from flask import Flask, request, render_template
 from sqlalchemy.exc import IntegrityError
 
-from models import db
+from models import db, Logs
 
 ''' Begin boilerplate code '''
 def create_app():
@@ -28,6 +28,32 @@ def index():
 @app.route('/app')
 def client_app():
   return app.send_static_file('app.html')
+
+@app.route('/logs', methods=['POST'])
+def create_log():
+    data = request.get_json()
+    log = Logs(stream=data['stream'], studentId=data['studentId'])
+    db.session.add(log)
+    db.session.commit()
+    return 'Log created!', 201
+
+@app.route('/logs', methods=['GET'])
+def get_logs():
+    logs = Logs.query.all()
+    logs = [log.toDict() for log in logs]
+    return json.dumps(logs)
+
+@app.route('/logs/<id>', methods=['PUT'])
+def update_log(id):
+    data = request.get_json()
+    log = Logs.query.get(id)
+    if not log:
+        return 'Log does not exist!', 404 
+    if 'stream' in data:
+        log.stream = data['stream']
+    db.session.add(log)
+    db.session.commit()
+    return 'Log Updated!', 201
 
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port=8080, debug=True)

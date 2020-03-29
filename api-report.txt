@@ -42,3 +42,40 @@ Mock Exam Collection
                      expected response body to equal 'Log Updated!' but got '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n<title>405 Method Not Allowed</title>\n<h1>Method Not Allowed</h1>\n<p>The method is not allowed for the requested URL.</p>\n' 
                      at assertion:0 in test-script                                                                                                                                                                                                                   
                      inside "Update Log"                                                                                                                                                                                                                             
+
+> mock@1.0.0 newman /workspace/info2602mockLE
+> newman run mock_collection.json -g globals.json; return 0;
+
+newman
+
+Mock Exam Collection
+
+→ Take Roll
+  POST https://8080-c93f9a26-3d1a-43e5-a2f9-c7714e1dce51.ws-us02.gitpod.io/logs [201 CREATED, 343B, 483ms]
+
+→ Get Logs
+  GET https://8080-c93f9a26-3d1a-43e5-a2f9-c7714e1dce51.ws-us02.gitpod.io/logs [200 OK, 2.29KB, 21ms]
+
+→ Update Log
+  PUT https://8080-c93f9a26-3d1a-43e5-a2f9-c7714e1dce51.ws-us02.gitpod.io/logs/1 [201 CREATED, 343B, 17ms]
+  ✓  Returns 'Log Updated!' 
+
+┌─────────────────────────┬────────────────────┬────────────────────┐
+│                         │           executed │             failed │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│              iterations │                  1 │                  0 │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│                requests │                  3 │                  0 │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│            test-scripts │                  1 │                  0 │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│      prerequest-scripts │                  0 │                  0 │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│              assertions │                  1 │                  0 │
+├─────────────────────────┴────────────────────┴────────────────────┤
+│ total run duration: 632ms                                         │
+├───────────────────────────────────────────────────────────────────┤
+│ total data received: 1.96KB (approx)                              │
+├───────────────────────────────────────────────────────────────────┤
+│ average response time: 173ms [min: 17ms, max: 483ms, s.d.: 218ms] │
+└───────────────────────────────────────────────────────────────────┘

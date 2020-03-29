@@ -8,5 +8,167 @@
 </head>
 <body>
     <h1>Your Application</h1>
+
+    <form name="myForm">
+        <label for="studentId"></label>
+        <input type="text" name="studentId">
+        <label for="Stream"></label>
+        <select name="stream">
+            <option value="1">Stream 1</option>
+            <option value="2">Stream 2</option>
+            <option value="3">Stream 3</option>   
+        </select>
+        <input type="submit" value="ADD">
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id Number</th>
+                <th>Date</th>
+                <th>Stream</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="result">
+            
+        </tbody>
+    </table>
+
+    <div id="container" style="width:100%; height:400px;"></div>
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script>
+
+    const server = 'https://8080-c93f9a26-3d1a-43e5-a2f9-c7714e1dce51.ws-us02.gitpod.io';
+    
+    function drawTable(records){
+        let result = document.querySelector('#result');
+        result.innerHTML = "";
+        for(let record of records){
+            result.innerHTML += `<tr>
+            <td>${record.studentId}</td>
+            <td>${record.created}</td>
+            <td>${record.stream}</td>
+            <td> <input type="button" value="EDIT" onclick="update(${record.id})"> </td>    
+            </tr>`;
+        }
+    }
+
+    async function getData(){
+        url = `${server}/logs`;
+        try{
+            let response = await fetch(url);//1. Send http request and get response
+            let result = await response.json();//2. Get data from response
+            drawTable(result);// 3. Do something with the data
+            getStats(result);
+        }catch(e){
+            console.log(e);//catch and log any errors
+        }
+    }
+
+    async function updateStream(url, newStream){
+          try{
+            let response = await fetch(
+            url, 
+            {
+                method: 'PUT',
+                body: JSON.stringify({stream: newStream}),//convert data to JSON string
+                headers: { 'Content-Type':'application/json' }// JSON data
+            },
+            );//1. Send http request and get response
+            
+            let result = await response.text();//2. Get message from response
+            alert(result);//3. Do something with the message
+            getData();
+        }catch(error){
+            console.log(error);//catch and log any errors
+        }
+    }
+
+
+    function update(id){
+        let newStream  = prompt("Please enter stream Number")
+        updateStream(`${server}/logs/${id}`,  newStream);
+    }
+
+    async function createStream(url, data){
+        try{
+
+            let response = await fetch(
+            url, 
+            {
+                method: 'POST',
+                body: JSON.stringify(data),//convert data to JSON string
+                headers: { 'Content-Type':'application/json' }// JSON data
+            },
+            );//1. Send http request and get response
+            
+            let result = await response.text();//2. Get message from response
+            alert(result);//3. Do something with the message
+            getData();
+        }catch(error){
+            console.log(error);//catch and log any errors
+        }
+    }
+
+    //the Event object is passed to any event handler called via an event attribute eg onclick, onsubmit etc
+    function submit(event){
+        event.preventDefault();//prevents page redirection
+            
+        //event target returns the element on which the event is fired upon ie event.target === myForm
+
+        //get data from form using elements property
+        let myform = event.target.elements;
+
+        let data = {
+            studentId:myform['studentId'].value,
+            stream: myform['stream'].value
+        }
+
+        createStream(`${server}/logs`, data);
+    }
+
+
+   function drawChart(data) {
+       console.log(data);
+        var myChart = Highcharts.chart('container', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: 'Attendence'
+            },
+            xAxis: {
+                categories: ['Stream 1', 'Stream 2', 'Stream 3']
+            },
+            yAxis: {
+                title: {
+                    text: 'Streams'
+                }
+            },
+            series: [{
+                name: 'Numstudents',
+                data: data
+            }]
+        });
+    }
+
+    function getStats(data){
+        let streamCount = [0, 0, 0];
+        for(rec of data){
+            let streamIdx = rec.stream; 
+            streamCount[streamIdx - 1]++;
+        }
+        drawChart(streamCount);
+    }
+
+    //attach the submit function to the submit event of myForm    
+    document.forms['myForm'].addEventListener('submit', submit);
+
+    getData();
+
+    </script>
+
 </body>
 </html>

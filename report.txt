@@ -1,0 +1,8 @@
+
+
+  Test Suite 1: Page should have the appropriate title
+    ✓ Check for the "Document" title
+
+
+  1 passing (1s)
+
