@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+  <head>
+     <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title></title>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  </head>
+  <body>
+    <nav>
+      <div class="nav-wrapper teal">
+        <a href="#" class="brand-logo center">Editing Log {{ id }}</a>
+      </div>
+    </nav>
+
+    <main class="container">
+        <div class="col s12 m7">
+    
+            <div class="card">
+                <div class="card-content">
+                    <div class="row">
+                        <form class="col s12" method="POST" action="/edit/{{id}}">
+                          <div class="row">
+
+                            <div class="input-field col s12">
+                                <select name="stream">
+                                  <option value="1">Stream 1</option>
+                                  <option value="2">Stream 2</option>
+                                  <option value="3">Stream 3</option>
+                                </select>
+                                <label>Materialize Select</label>
+                            </div>
+
+                            <button class="btn waves-effect waves-light right" id="addBtn" type="submit">ADD
+                            </button>
+                      
+                          </div>
+                        </form>
+                      </div>
+                            
+                </div>
+            </div>
+        </div>
+
+    </main> 
+
+
+                
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var instances = M.FormSelect.init(document.querySelectorAll('select'));
+        });
+    </script>
+
+  </body>
+</html>

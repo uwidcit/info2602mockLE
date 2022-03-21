@@ -1,0 +1,278 @@
+
+<!doctype html>
+<html>
+  <head>
+     <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Log App</title>
+    <style>
+      .highcharts-figure,
+      .highcharts-data-table table {
+          min-width: 310px;
+          max-width: 800px;
+          margin: 1em auto;
+      }
+
+      #container {
+          height: 400px;
+      }
+
+      .highcharts-data-table table {
+          font-family: Verdana, sans-serif;
+          border-collapse: collapse;
+          border: 1px solid #ebebeb;
+          margin: 10px auto;
+          text-align: center;
+          width: 100%;
+          max-width: 500px;
+      }
+
+      .highcharts-data-table caption {
+          padding: 1em 0;
+          font-size: 1.2em;
+          color: #555;
+      }
+
+      .highcharts-data-table th {
+          font-weight: 600;
+          padding: 0.5em;
+      }
+
+      .highcharts-data-table td,
+      .highcharts-data-table th,
+      .highcharts-data-table caption {
+          padding: 0.5em;
+      }
+
+      .highcharts-data-table thead tr,
+      .highcharts-data-table tr:nth-child(even) {
+          background: #f8f8f8;
+      }
+
+      .highcharts-data-table tr:hover {
+          background: #f1f7ff;
+      }
+
+    </style>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/modules/export-data.js"></script>
+  <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+  </head>
+  <body>
+    <nav>
+      <div class="nav-wrapper teal">
+        <a href="#" class="brand-logo center">Logo</a>
+      </div>
+    </nav>
+
+    <main class="container">
+        <div class="col s12 m7">
+            <h2 class="header">Add Log</h2>
+    
+            <div class="card">
+                <div class="card-content">
+                    <div class="row">
+                        <form class="col s12" onsubmit="createLog(event)">
+                          <div class="row">
+                            <div class="input-field col s12">
+                              <input placeholder="Placeholder" id="stdid" name="stdid" type="text" class="validate" required minlength="8">
+                              <label for="first_name">ID Number</label>
+                            </div>
+
+                            <div class="input-field col s12">
+                                <select name="stream">
+                                  <option value="1">Stream 1</option>
+                                  <option value="2">Stream 2</option>
+                                  <option value="3">Stream 3</option>
+                                </select>
+                                <label>Materialize Select</label>
+                            </div>
+
+                            <button class="btn waves-effect waves-light right" id="addBtn" type="submit">ADD
+                            </button>
+                      
+                          </div>
+                        </form>
+                      </div>
+                            
+                </div>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Number</th>
+                    <th>Date</th>
+                    <th>Stream</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="result">
+              
+            </tbody>
+        </table>
+
+        <figure class="highcharts-figure">
+          <div id="container"></div>
+      </figure>
+
+    </main> 
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        function displayChart(data){
+
+          Highcharts.chart('container', {
+              chart: {
+                  type: 'column'
+              },
+              title: {
+                  text: 'Lab Stream Attendance'
+              },
+              yAxis: {
+                  min: 0,
+                  title: {
+                      text: 'Attendance'
+                  }
+              },
+              tooltip: {
+                  headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                  pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                      '<td style="padding:0"><b>{point.y:.1f} students</b></td></tr>',
+                  footerFormat: '</table>',
+                  shared: true,
+                  useHTML: true
+              },
+              plotOptions: {
+                  column: {
+                      pointPadding: 0.2,
+                      borderWidth: 0
+                  }
+              },
+              series: [
+                {
+                  name: 'Stream 1',
+                  data: [data[0]],
+                }, 
+                {
+                  name: 'Stream 2',
+                  data: [data[1]]
+                }, 
+                {
+                  name: 'Stream 3',
+                  data: [data[2]]
+                }
+            ]
+          });
+
+          }
+
+        async function getStats(){
+          let response = await fetch('/stats');
+          let data = await response.json(); //data = [1, 3, 4]
+          displayChart(data);
+        }
+
+        getStats();
+
+        function initMaterialize(){
+          var instances = M.FormSelect.init(document.querySelectorAll('select'));
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initMaterialize();
+        });
+
+        async function sendRequest(url, method, data){
+          try{
+
+            let options = { method }
+
+            if(data){
+              options.body = JSON.stringify(data),//convert data to JSON
+              options.headers = { 'Content-Type':'application/json' };//set json header 
+            }
+
+            let response = await fetch( url, options);//1. Send http request and get response
+            let result = await response.json();//2. Get message from response
+            return result;//return the result
+
+          }catch(error){
+            return error;//catch and log any errors
+          }
+        }
+        
+        //returns the data from a form
+        function serializeForm(form){
+          let formData = new FormData(form);//create a formData object from form
+          return Object.fromEntries(formData);//convert formData object to json
+        }
+
+        // displays a toast message
+        function toast(message){
+          M.toast({html: message});
+        }
+
+        async function createLog(event){
+          event.preventDefault();
+          let data = serializeForm(event.target);
+          let result = await sendRequest('/api/logs', 'POST', data);
+          toast(result.message);
+        }
+        
+        function displayTable(logs){
+          //write a render function that displays todo data on the page
+
+          let result = document.querySelector('#result'); //get render target
+          result.innerHTML = '';//clear result area
+          
+          let html = '';//make an empty html string
+          for(let log of logs){
+            html+= `<tr>
+                  <td>${log.stdid}</td>
+                  <td>${log.date}</td>
+                  <td>${log.stream}</td>
+                  <td>
+                    <div class="input-field col s12">
+                          <select name="stream" onchange="update(event, ${log.id})">
+                            <option value="1" ${ log.stream == 1 ? "selected" : '' }>Stream 1</option>
+                            <option value="2" ${ log.stream == 2 ? "selected" : '' }>Stream 2</option>
+                            <option value="3" ${ log.stream == 3 ? "selected" : '' }>Stream 3</option>
+                          </select>
+                          <label>Materialize Select</label>
+                      </div>
+                  </td>
+              </tr>
+            `;
+          }
+          //add the dynamic html to the DOM
+          result.innerHTML = html;
+          initMaterialize();
+
+        }
+
+        async function update(event, id){
+          
+          let stream = event.target.value;
+          let result = await sendRequest(`/api/logs/${id}`, 'PUT', {stream});
+          toast(result.message);
+          getLogs();
+          getStats();
+        }
+
+        async function getLogs(){
+            let logs = await sendRequest('/api/logs', 'GET');
+            displayTable(logs);
+        }
+        
+        getLogs();
+    </script>
+
+  </body>
+</html>
